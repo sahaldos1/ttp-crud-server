@@ -32,4 +32,21 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
+router.post("/", async (req, res, next) => {
+  Object.keys(req.body).forEach((key) =>
+    req.body[key] === "" ? delete req.body[key] : req.body[key]
+  );
+
+  try {
+    // Create a new student on the database
+    const newStudent = await Student.create(req.body);
+
+    // The database should return a student
+    // Send that student as a json to the client
+    res.status(201).send(newStudent);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
